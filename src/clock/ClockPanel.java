@@ -1,10 +1,10 @@
 package clock;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.awt.font.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 
 public class ClockPanel extends JPanel {
     
