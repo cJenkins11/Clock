@@ -32,7 +32,6 @@ public class AlarmQueueView extends JPanel {
 
             PriorityItem item = (PriorityItem) node.getItem();
 
-
             JPanel alarmBox = new JPanel();
             Label alarmName = new Label(((Alarm)item.getItem()).getAlarmName());
             Label alarmTime = new Label(((Alarm) item.getItem()).getFormattedSetTime());

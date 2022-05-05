@@ -2,7 +2,6 @@ package clock;
 
 import java.util.Calendar;
 import java.util.Observable;
-//import java.util.GregorianCalendar;
 
 public class Model extends Observable {
     
@@ -17,11 +16,13 @@ public class Model extends Observable {
     FunctionMenuModel functionMenuModel;
     AlarmFormModel alarmFormModel;
     AlarmQueueModel alarmQueueModel;
-    
+    EditAlarmModel editAlarmModel;
+
     public Model() throws QueueUnderflowException {
         functionMenuModel = new FunctionMenuModel();
         alarmFormModel = new AlarmFormModel();
         alarmQueueModel = new AlarmQueueModel<>();
+        //editAlarmModel= new EditAlarmModel();
         update();
     }
     
@@ -38,20 +39,6 @@ public class Model extends Observable {
         if (minute != oldMinute) {
             checkSetAlarms();
         }
-
-        /*if (!alarmQueueModel.isEmpty()) {
-            for (Node node = alarmQueueModel.headNode(); node != null; node = node.getNext()) {
-
-                System.out.println(node);
-                System.out.println(node.getNext());
-                PriorityItem item = (PriorityItem) node.getItem();
-
-                System.out.println("TIME TEST");
-                System.out.println((((Alarm) item.getItem()).getSetTime()));
-
-                //System.out.println((Alarm) item.getItem());
-            }
-        }*/
 
 
         if (oldSecond != second) {
@@ -141,5 +128,13 @@ public class Model extends Observable {
 
     public void setAlarmQueueModel(AlarmQueueModel<Object> alarmQueueModel) {
         this.alarmQueueModel = alarmQueueModel;
+    }
+
+    public EditAlarmModel getEditAlarmModel() {
+        return editAlarmModel;
+    }
+
+    public void setEditAlarmModel(EditAlarmModel editAlarmModel) {
+        this.editAlarmModel = editAlarmModel;
     }
 }

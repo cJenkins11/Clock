@@ -4,19 +4,19 @@ import java.awt.*;
 import java.util.Observable;
 
 
-public class AlarmFormModel extends Observable {
+public class EditAlarmModel extends Observable {
 
     final int PREF_HEIGHT = 400;
     final int PREF_WIDTH = 300;
     final Color PREF_BACKGROUND = Color.white;
-    //Alarm alarm = new Alarm("1232", "AM", "name", 31);
+
 
     final Dimension spinnerArrows = new Dimension(30, 30);
     int daysRepeating = 0;
     Alarm alarm;
 
-    public AlarmFormModel() {
-        update();
+    public EditAlarmModel(Alarm alarm) {
+        this.alarm = alarm;
     }
 
     public int getPREF_HEIGHT() {
@@ -37,10 +37,6 @@ public class AlarmFormModel extends Observable {
 
     public Dimension getSpinnerArrows() {
         return spinnerArrows;
-    }
-
-    public void update() {
-
     }
 
     public Alarm getAlarm() {

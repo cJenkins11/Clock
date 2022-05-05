@@ -6,11 +6,10 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.util.Observable;
-import java.util.Observer;
 
-public class AlarmFormView extends JFrame implements Observer {
+public class EditAlarmView extends JFrame {
 
-    AlarmFormModel model;
+    EditAlarmModel model;
 
 
     private JSpinner hourSpinner;
@@ -25,7 +24,7 @@ public class AlarmFormView extends JFrame implements Observer {
     private JRadioButton fridayRB;
     private JTextField alarmName;
     private JButton cancelButton;
-    private JButton saveButton;
+    private JButton updateButton;
 
     private JPanel alarmPanel;
     private JPanel timePanel;
@@ -34,8 +33,8 @@ public class AlarmFormView extends JFrame implements Observer {
     private JPanel buttonPanel;
     int daysRepeating = 0;
 
-    public AlarmFormView(AlarmFormModel alarmFormModel) {
-        model = alarmFormModel;
+    public EditAlarmView(EditAlarmModel editAlarmModel) {
+        model = editAlarmModel;
 
         setPreferredSize(new Dimension(600, 250));
 
@@ -90,15 +89,26 @@ public class AlarmFormView extends JFrame implements Observer {
 
 
         cancelButton = new JButton("Cancel");
-        saveButton = new JButton("Save");
+        updateButton = new JButton("Update");
 
         hourSpinner.setValue(1);
         hourSpinner.setPreferredSize(new Dimension(100,30));
         minuteSpinner.setPreferredSize(new Dimension(100,30));
-        //minuteSpinner.setPreferredSize(model.getSpinnerArrows());
+
 
         am_pm.addItem("AM");
         am_pm.addItem("PM");
+
+
+        hourSpinner.setValue(Integer.parseInt(model.getAlarm().setTime.substring(0,2)));
+        System.out.println("Hours: " + Integer.parseInt(model.getAlarm().setTime.substring(0,2)));
+
+        minuteSpinner.setValue(Integer.parseInt(model.getAlarm().setTime.substring(2,4)));
+        System.out.println("Mins: " + Integer.parseInt(model.getAlarm().setTime.substring(2,4)));
+
+        am_pm.setSelectedItem(model.getAlarm().getAM_PM());
+        alarmName.setText(model.getAlarm().getAlarmName());
+
 
         timePanel.setLayout(new FlowLayout());
         timePanel.add(hourSpinner);
@@ -118,7 +128,7 @@ public class AlarmFormView extends JFrame implements Observer {
         namePanel.add(alarmName);
 
         buttonPanel.add(cancelButton);
-        buttonPanel.add(saveButton);
+        buttonPanel.add(updateButton);
 
         alarmPanel = new JPanel();
         //alarmPanel.setPreferredSize(new Dimension(500, 230));
@@ -130,6 +140,9 @@ public class AlarmFormView extends JFrame implements Observer {
         alarmPanel.add(buttonPanel);
 
         add(alarmPanel);
+        //this.setLayout(new GridLayout(4, 1));
+
+
 
         ChangeListener hourListener = e -> {
 
@@ -281,44 +294,16 @@ public class AlarmFormView extends JFrame implements Observer {
         };
         cancelButton.addActionListener(cancel);
 
-        /*ActionListener save = e -> {
-            System.out.println("Test");
-            String timeString = "";
-
-            if (Integer.parseInt(hourSpinner.getValue().toString()) < 10 ) {
-                timeString += "0" + hourSpinner.getValue().toString();
-            } else {
-                timeString += hourSpinner.getValue().toString();
-            }
-
-            if (Integer.parseInt(minuteSpinner.getValue().toString()) < 10 ) {
-                timeString += "0" + minuteSpinner.getValue().toString();
-            } else {
-                timeString += minuteSpinner.getValue().toString();
-            }
-
-            System.out.println(timeString);
-
-            Alarm alarm = new Alarm(timeString, am_pm.getSelectedItem().toString(), alarmName.getText(), daysRepeating);
-            model.setAlarm(alarm);
-
-            System.out.println(alarm);
-            dispose();
-        };
-        saveButton.addActionListener(save);*/
-
-
-
 
         pack();
         setVisible(true);
     }
 
-    public AlarmFormModel getModel() {
+    public EditAlarmModel getModel() {
         return model;
     }
 
-    public void setModel(AlarmFormModel model) {
+    public void setModel(EditAlarmModel model) {
         this.model = model;
     }
 
@@ -418,12 +403,12 @@ public class AlarmFormView extends JFrame implements Observer {
         this.cancelButton = cancelButton;
     }
 
-    public JButton getSaveButton() {
-        return saveButton;
+    public JButton getUpdateButton() {
+        return updateButton;
     }
 
-    public void setSaveButton(JButton saveButton) {
-        this.saveButton = saveButton;
+    public void setUpdateButton(JButton updateButton) {
+        this.updateButton = updateButton;
     }
 
     public JPanel getAlarmPanel() {
@@ -442,8 +427,4 @@ public class AlarmFormView extends JFrame implements Observer {
         this.daysRepeating = daysRepeating;
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-
-    }
 }
