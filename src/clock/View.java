@@ -40,6 +40,7 @@ public class View implements Observer {
     }
     
     public void update(Observable o, Object arg) {
+        frame.pack();
         panel.repaint();
         if (alarmQueueView.getAlarms() != null) {
 

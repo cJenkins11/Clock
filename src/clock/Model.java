@@ -39,9 +39,9 @@ public class Model extends Observable {
         oldSecond = second;
         second = date.get(Calendar.SECOND);
 
-        if (minute != oldMinute) {
+        /*if (minute != oldMinute) {
             //checkSetAlarms();
-        }
+        }*/
 
 
         if (oldSecond != second) {

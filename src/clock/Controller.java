@@ -170,9 +170,9 @@ public class Controller {
 
             view.getAlarmingView().dispose();
         };
-
         view.getAlarmingView().getDismissButton().addActionListener(dismissListener);
         //view.getFrame().add(view.getFunctionMenuView(), BorderLayout.LINE_START);
+
     }
 
     private void initFunctionMenu() {

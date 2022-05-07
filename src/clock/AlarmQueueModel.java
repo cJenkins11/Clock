@@ -7,6 +7,7 @@ import java.util.Observable;
 public class AlarmQueueModel<T> extends Observable implements PriorityQueue<T> {
 
     private Node head;
+            //, tail;
     private int size;
 
     Dimension PREF_SIZE = new Dimension(300, 400);
@@ -14,6 +15,9 @@ public class AlarmQueueModel<T> extends Observable implements PriorityQueue<T> {
 
     public AlarmQueueModel() {
         head = null;
+
+        //Changes
+        //tail = null;
     }
 
     @Override
@@ -80,6 +84,41 @@ public class AlarmQueueModel<T> extends Observable implements PriorityQueue<T> {
             throw new QueueUnderflowException();
         }
         head = head.getNext();
+    }
+
+    public void remove(T alarm) throws QueueUnderflowException {
+        if (isEmpty()) {
+            throw new QueueUnderflowException();
+        }
+        //Node next = ((Node) alarm).getNext();
+
+        Node previous = null;
+
+        for (Node node = head; node != null; node = node.getNext()) {
+
+            if (node == alarm) {
+
+                previous.setNext(node.getNext());
+
+
+            } else {
+                previous = node;
+            }
+
+
+            /*if (node != head) {
+                result += ", ";
+                //System.out.println("Node was not the head node");
+            }
+            result += node.getItem();*/
+            //System.out.println("Node item added to result string");
+        }
+
+        /*previous.setNext(next);
+        next.setPrevious(previous);*/
+        ((Node) alarm).setNext(null);
+
+
     }
 
     @Override

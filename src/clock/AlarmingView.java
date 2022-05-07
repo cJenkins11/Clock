@@ -2,21 +2,9 @@ package clock;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
-import java.applet.Applet;
-import java.applet.AudioClip;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Observable;
-import java.util.Observer;
 
 public class AlarmingView extends JFrame {
 
@@ -59,9 +47,22 @@ public class AlarmingView extends JFrame {
 
 
         main = new JPanel();
+        main.setLayout(new GridLayout(3, 1));
 
+        JPanel alarmNamePanel = new JPanel();
+        alarmNamePanel.setLayout(new FlowLayout());
+
+        JPanel alarmTimePanel = new JPanel();
+        alarmTimePanel.setLayout(new FlowLayout());
+
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new FlowLayout());
+
+        JLabel alarmNameLabel = new JLabel("Alarm Name: ");
         alarmName = new JLabel(model.getAlarmRinging().getAlarmName());
+        JLabel alarmTimeLabel = new JLabel("Time: ");
         alarmTime = new JLabel(model.getAlarmRinging().getFormattedSetTime());
+
 
         snooze = new JButton("Snooze");
         dismiss = new JButton("Dismiss");
@@ -73,11 +74,21 @@ public class AlarmingView extends JFrame {
         };
         dismiss.addActionListener(dismissListener);*/
 
+        alarmNamePanel.add(alarmNameLabel);
+        alarmNamePanel.add(alarmName);
 
-        main.add(alarmName);
-        main.add(alarmTime);
-        main.add(snooze);
-        main.add(dismiss);
+        alarmTimePanel.add(alarmTimeLabel);
+        alarmTimePanel.add(alarmTime);
+
+        buttonsPanel.add(snooze);
+        buttonsPanel.add(dismiss);
+        /*main.add(alarmName);
+        main.add(alarmTime);*/
+        main.add(alarmNamePanel);
+        main.add(alarmTimePanel);
+        main.add(buttonsPanel);
+        /*main.add(snooze);
+        main.add(dismiss);*/
 
         audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
 

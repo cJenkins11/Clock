@@ -7,7 +7,7 @@ import java.util.Observable;
 public class AlarmFormModel extends Observable {
 
     final int PREF_HEIGHT = 400;
-    final int PREF_WIDTH = 300;
+    final int PREF_WIDTH = 200;
     final Color PREF_BACKGROUND = Color.white;
     //Alarm alarm = new Alarm("1232", "AM", "name", 31);
 
