@@ -19,6 +19,7 @@ public class Model extends Observable {
     AlarmFormModel alarmFormModel;
     AlarmQueueModel alarmQueueModel;
     EditAlarmModel editAlarmModel;
+    AlarmingModel alarmingModel;
 
     public Model() throws QueueUnderflowException {
         functionMenuModel = new FunctionMenuModel();
@@ -39,7 +40,7 @@ public class Model extends Observable {
         second = date.get(Calendar.SECOND);
 
         if (minute != oldMinute) {
-            checkSetAlarms();
+            //checkSetAlarms();
         }
 
 
@@ -49,7 +50,7 @@ public class Model extends Observable {
         }
     }
 
-    private void checkSetAlarms() throws QueueUnderflowException {
+    public Object checkSetAlarms() throws QueueUnderflowException {
         System.out.println("check set alarms test");
         Calendar date = Calendar.getInstance();
         if (!alarmQueueModel.isEmpty()) {
@@ -70,6 +71,9 @@ public class Model extends Observable {
                     System.out.println(date.get(Calendar.HOUR));
                     System.out.println(((Alarm) item.getItem()).getSetTime().substring(0, 2));
 
+                    System.out.println(date.get(Calendar.MINUTE));
+                    System.out.println(((Alarm) item.getItem()).getSetTime().substring(2, 4));
+
                     String hourString = Integer.toString(hour);
                     if (hour < 10) {
                         hourString = "0" + hourString;
@@ -78,16 +82,23 @@ public class Model extends Observable {
                             hourString = "12";
                         }
                     }
+                    String minuteString = Integer.toString(minute);
+                    if (minute < 10) {
+                        minuteString = "0" + minuteString;
+
+                    }
 
                     //if (((Alarm) item.getItem()).getSetTime().substring(0, 2).equals(Integer.toString(date.get(hour))))  {
                     if (((Alarm) item.getItem()).getSetTime().substring(0, 2).equals(hourString))  {
 
                         System.out.println("Alarm is set for this hour");
 
-                        if (((Alarm) item.getItem()).getSetTime().substring(2, 4).equals(Integer.toString(date.get(Calendar.MINUTE)))) {
+                        //if (((Alarm) item.getItem()).getSetTime().substring(2, 4).equals(Integer.toString(date.get(Calendar.MINUTE)))) {
+                        if (((Alarm) item.getItem()).getSetTime().substring(2, 4).equals(minuteString)) {
 
                             System.out.println("Alarm is set for this minute");
-
+                            //notifyObservers(item.getItem());
+                            return item.getItem();
                         }
                     }
 
@@ -107,6 +118,7 @@ public class Model extends Observable {
         } else {
             System.out.println("The queue is empty");
         }
+        return null;
     }
 
     private int toBinaryDay(int calendarDay) {
@@ -163,5 +175,13 @@ public class Model extends Observable {
 
     public void setEditAlarmModel(EditAlarmModel editAlarmModel) {
         this.editAlarmModel = editAlarmModel;
+    }
+
+    public AlarmingModel getAlarmingModel() {
+        return alarmingModel;
+    }
+
+    public void setAlarmingModel(AlarmingModel alarmingModel) {
+        this.alarmingModel = alarmingModel;
     }
 }

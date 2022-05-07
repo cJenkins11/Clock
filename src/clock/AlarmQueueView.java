@@ -23,7 +23,8 @@ public class AlarmQueueView extends JPanel {
 
     public void updateQueue() throws QueueUnderflowException {
         removeAll();
-        repaint();
+        //repaint();
+
         int index = 0;
 
         alarms = new JPanel[model.getSize()];
@@ -42,6 +43,13 @@ public class AlarmQueueView extends JPanel {
             alarmOn.addItem("On");
             alarmOn.addItem("Off");
 
+
+            if (((Alarm) item.getItem()).isSet()) {
+                alarmOn.setSelectedItem("On");
+            } else {
+                alarmOn.setSelectedItem("Off");
+            }
+
             alarmBox.add(alarmName);
             alarmBox.add(alarmTime);
             alarmBox.add(edit);
@@ -49,12 +57,18 @@ public class AlarmQueueView extends JPanel {
 
             add(alarmBox);
 
+            //alarmBox.validate();
+            //repaint();
+            alarmBox.setVisible(true);
+
             alarms[index] = alarmBox;
 
             index += 1;
             System.out.println("Index: " + index);
             //System.out.println((Alarm) item.getItem());
         }
+
+        validate();
 
     }
 

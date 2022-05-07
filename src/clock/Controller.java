@@ -1,15 +1,19 @@
 package clock;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.io.IOException;
+import java.util.Calendar;
 
 public class Controller {
     
     ActionListener listener;
     Timer timer;
-    
+    Timer alarmTimer;
+
     Model model;
 
     View view;
@@ -34,6 +38,57 @@ public class Controller {
         
         timer = new Timer(100, listener);
         timer.start();
+
+        WindowListener windowListener = new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                model.getAlarmingModel().getAlarmRinging().setSet(false);
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                view.getAlarmingView().getClip().stop();
+                view.getAlarmingView().dispose();
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                /*try {
+                    view.getAlarmQueueView().updateQueue();
+                    view.getAlarmQueueView().validate();
+                } catch (QueueUnderflowException ex) {
+                    ex.printStackTrace();
+                }*/
+                try {
+                    updateAlarmListeners();
+                } catch (QueueUnderflowException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        };
+
+        ActionListener checkAlarms = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+
+                    if (model.checkSetAlarms() != null) {
+
+                        initAlarmAlert(model.checkSetAlarms());
+                        view.getAlarmingView().addWindowListener(windowListener);
+                        view.getAlarmQueueView().validate();
+                        /*view.getAlarmQueueView().updateQueue();
+                        model.update();*/
+                    }
+
+                } catch (QueueUnderflowException | UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        };
+
+        alarmTimer = new Timer(1000, checkAlarms);
+        alarmTimer.start();
+
 
         ActionListener saveAlarm = e -> {
 
@@ -67,18 +122,22 @@ public class Controller {
             try {
 
                 view.getAlarmQueueView().updateQueue();
+                //view.getAlarmQueueView().repaint();
                 updateAlarmListeners();
 
             } catch (QueueUnderflowException ex) {
                 ex.printStackTrace();
             }
 
+            /*try {
+                view.getAlarmQueueView().updateQueue();
+                //view.getAlarmQueueView().validate();
+            } catch (QueueUnderflowException ex) {
+                ex.printStackTrace();
+            }*/
+
             view.getAlarmFormView().dispose();
         };
-
-
-
-
 
 
         ActionListener newAlarm  = e -> {
@@ -88,6 +147,32 @@ public class Controller {
         view.getFunctionMenuView().getNewAlarm().addActionListener(newAlarm);
 
 
+
+
+
+
+    }
+
+    private void initAlarmAlert(Object o) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+        model.setAlarmingModel(new AlarmingModel((Alarm) o));
+        view.setAlarmingView(new AlarmingView(model.getAlarmingModel()));
+
+        ActionListener dismissListener = e -> {
+            view.getAlarmingView().getClip().stop();
+            //revalidate();
+
+            try {
+                view.getAlarmQueueView().updateQueue();
+                updateAlarmListeners();
+            } catch (QueueUnderflowException ex) {
+                ex.printStackTrace();
+            }
+
+            view.getAlarmingView().dispose();
+        };
+
+        view.getAlarmingView().getDismissButton().addActionListener(dismissListener);
+        //view.getFrame().add(view.getFunctionMenuView(), BorderLayout.LINE_START);
     }
 
     private void initFunctionMenu() {
@@ -142,6 +227,7 @@ public class Controller {
 
                     try {
                         view.getAlarmQueueView().updateQueue();
+                        updateAlarmListeners();
                     } catch (QueueUnderflowException ex) {
                         ex.printStackTrace();
                     }
@@ -156,13 +242,13 @@ public class Controller {
 
 
 
-                Node finalAlarmNode = alarmNode;
+                //Node finalAlarmNode = alarmNode;
                 ActionListener editListener = e -> {
                     initEditAlarm((Alarm) item.getItem());
                     view.getEditAlarmView().getUpdateButton().addActionListener(updateAlarm);
 
                     System.out.println(e.getSource());
-                    System.out.println(finalAlarmNode.getItem());
+                    //System.out.println(finalAlarmNode.getItem());
                 };
 
                 ActionListener setAlarm = e -> {
@@ -189,4 +275,8 @@ public class Controller {
             }
         }
     }
+
+
+
+
 }

@@ -8,7 +8,11 @@ public class AlarmingModel extends Observable {
     final int PREF_HEIGHT = 300;
     final int PREF_WIDTH = 400;
     final Color PREF_BACKGROUND = Color.WHITE;
+    Alarm alarmRinging;
 
+    public AlarmingModel(Alarm o) {
+        alarmRinging = o;
+    }
 
 
     public int getPREF_HEIGHT() {
@@ -21,5 +25,9 @@ public class AlarmingModel extends Observable {
 
     public Color getPREF_BACKGROUND() {
         return PREF_BACKGROUND;
+    }
+
+    public Alarm getAlarmRinging() {
+        return alarmRinging;
     }
 }

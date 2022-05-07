@@ -13,6 +13,7 @@ public class View implements Observer {
     AlarmFormView alarmFormView;
     AlarmQueueView alarmQueueView;
     EditAlarmView editAlarmView;
+    AlarmingView alarmingView;
 
     public View(Model model) {
         frame = new JFrame();
@@ -32,13 +33,24 @@ public class View implements Observer {
         pane.add(panel, BorderLayout.CENTER);
 
         // End of borderlayout code
-        
+
+
         frame.pack();
         frame.setVisible(true);
     }
     
     public void update(Observable o, Object arg) {
         panel.repaint();
+        if (alarmQueueView.getAlarms() != null) {
+
+            /*try {
+                alarmQueueView.updateQueue();
+            } catch (QueueUnderflowException e) {
+                e.printStackTrace();
+            }*/
+
+        }
+
     }
 
     public JFrame getFrame() {
@@ -75,5 +87,13 @@ public class View implements Observer {
 
     public void setEditAlarmView(EditAlarmView editAlarmView) {
         this.editAlarmView = editAlarmView;
+    }
+
+    public AlarmingView getAlarmingView() {
+        return alarmingView;
+    }
+
+    public void setAlarmingView(AlarmingView alarmingView) {
+        this.alarmingView = alarmingView;
     }
 }
