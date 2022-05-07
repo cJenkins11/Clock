@@ -129,6 +129,16 @@ public class Controller {
 
                     ((Alarm) item.getItem()).setSetTime(hour + minute);
                     ((Alarm) item.getItem()).setAlarmName(view.getEditAlarmView().getAlarmName().getText());
+                    ((Alarm) item.getItem()).setAM_PM(view.getEditAlarmView().getAm_pm().getSelectedItem().toString());
+
+                    if (view.getEditAlarmView().getAm_pm().getSelectedItem().toString() == "PM") {
+                        item.setPriority(Integer.parseInt(hour + minute) + 1200);
+                        System.out.println("time pm: +1200 " + hour + minute);
+                    } else {
+                        item.setPriority(Integer.parseInt(hour + minute));
+                        System.out.println("AM Time" + hour + minute);
+                    }
+
 
                     try {
                         view.getAlarmQueueView().updateQueue();

@@ -58,8 +58,8 @@ public class AlarmQueueView extends JPanel {
 
     }
 
-
     public JPanel[] getAlarms() {
         return alarms;
     }
+
 }

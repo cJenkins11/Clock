@@ -8,7 +8,7 @@ package clock;
 public class PriorityItem<T> {
 
     private final T item;
-    private final int priority;
+    private int priority;
 
     public PriorityItem(T item, int priority) {
         this.item = item;
@@ -26,5 +26,9 @@ public class PriorityItem<T> {
     @Override
     public String toString() {
         return "(" + getItem() + ", " + getPriority() + ")";
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 }

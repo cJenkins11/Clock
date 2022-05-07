@@ -4,7 +4,9 @@ import java.util.Calendar;
 import java.util.Observable;
 
 public class Model extends Observable {
-    
+
+    Calendar date;
+
     int hour = 0;
     int minute = 0;
     int second = 0;
@@ -28,7 +30,7 @@ public class Model extends Observable {
     
     public void update() throws QueueUnderflowException {
 
-        Calendar date = Calendar.getInstance();
+        date = Calendar.getInstance();
         oldHour = hour;
         hour = date.get(Calendar.HOUR);
         oldMinute = minute;
@@ -61,9 +63,34 @@ public class Model extends Observable {
                 //CHECK ALARM IS SET
                 if (((Alarm)item.getItem()).isSet()) {
 
-                    if (toBinaryDay(date.DAY_OF_WEEK) == 0) {
+                    /*if (toBinaryDay(date.DAY_OF_WEEK) == 0) {
+                    }*/
 
+                    //If set alarm hour is equal to the current alarm continue checking
+                    System.out.println(date.get(Calendar.HOUR));
+                    System.out.println(((Alarm) item.getItem()).getSetTime().substring(0, 2));
+
+                    String hourString = Integer.toString(hour);
+                    if (hour < 10) {
+                        hourString = "0" + hourString;
+
+                        if (hour == 0) {
+                            hourString = "12";
+                        }
                     }
+
+                    //if (((Alarm) item.getItem()).getSetTime().substring(0, 2).equals(Integer.toString(date.get(hour))))  {
+                    if (((Alarm) item.getItem()).getSetTime().substring(0, 2).equals(hourString))  {
+
+                        System.out.println("Alarm is set for this hour");
+
+                        if (((Alarm) item.getItem()).getSetTime().substring(2, 4).equals(Integer.toString(date.get(Calendar.MINUTE)))) {
+
+                            System.out.println("Alarm is set for this minute");
+
+                        }
+                    }
+
                     System.out.println("Ayo there's a set alarm in here");
 
                 } else {
