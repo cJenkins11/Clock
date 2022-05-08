@@ -30,6 +30,11 @@ public class Controller {
                 try {
                     model.update();
 
+                    /*if (!model.getAlarmQueueModel().isEmpty()) {
+                        updatePriorities();
+                        view.getAlarmQueueView().updateQueue();
+                        updateAlarmListeners();
+                    }*/
                 } catch (QueueUnderflowException ex) {
                     ex.printStackTrace();
                 }
@@ -69,8 +74,14 @@ public class Controller {
 
         ActionListener checkAlarms = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                try {
 
+
+                try {
+                    if (!model.getAlarmQueueModel().isEmpty()) {
+                        updatePriorities();
+                        view.getAlarmQueueView().updateQueue();
+                        updateAlarmListeners();
+                    }
                     if (model.checkSetAlarms() != null) {
 
                         initAlarmAlert(model.checkSetAlarms());
@@ -111,11 +122,25 @@ public class Controller {
 
             Alarm alarm = new Alarm(timeString, view.getAlarmFormView().getAm_pm().getSelectedItem().toString(), view.getAlarmFormView().getAlarmName().getText(), view.getAlarmFormView().getDaysRepeating());
 
-            if (alarm.getAM_PM() == "PM") {
+            if (model.currentTimeMins() > alarm.getSetTimeMins()) {
+                System.out.println("Current time is after alarm time");
+                priority = (alarm.getSetTimeMins() + 1440) - model.currentTimeMins();
+            } else {
+
+                priority = alarm.getSetTimeMins() - model.currentTimeMins();
+            }
+
+            /*if (alarm.getAM_PM() == "PM") {
+                priority = priority + 720;
+            }
+*/
+            System.out.println("Priority: " + priority);
+
+            /*if (alarm.getAM_PM() == "PM") {
                 priority = Integer.parseInt(alarm.getSetTime()) + 1200;
             } else {
                 priority = Integer.parseInt(alarm.getSetTime());
-            }
+            }*/
 
             model.getAlarmQueueModel().add(alarm, priority);
 
@@ -239,6 +264,7 @@ public class Controller {
 
                 JButton editButton = (JButton) alarmPanel.getComponent(2);
                 JComboBox set = (JComboBox) alarmPanel.getComponent(3);
+                JButton delete = (JButton) alarmPanel.getComponent(4);
 
 
 
@@ -268,12 +294,53 @@ public class Controller {
                     System.out.println(set.getSelectedItem());
                 };
 
+
+                ActionListener deleteListener = e -> {
+
+                    System.out.println("Delete clicked");
+                    try {
+
+                        model.getAlarmQueueModel().remove((Alarm) item.getItem());
+                        view.getAlarmQueueView().updateQueue();
+                        updateAlarmListeners();
+
+                    } catch (QueueUnderflowException ex) {
+                        ex.printStackTrace();
+                    }
+                };
+
                 set.addActionListener(setAlarm);
                 editButton.addActionListener(editListener);
+
+                delete.addActionListener(deleteListener);
 
                 index++;
             }
         }
+    }
+
+
+    public void updatePriorities() throws QueueUnderflowException {
+
+        for (Node alarmNode = model.getAlarmQueueModel().headNode(); alarmNode != null; alarmNode = alarmNode.getNext()) {
+
+            int priority = 0;
+            PriorityItem item = (PriorityItem) alarmNode.getItem();
+            System.out.println("Old Priority: " + item.getPriority());
+
+            if (model.currentTimeMins() > ((Alarm)item.getItem()).getSetTimeMins()) {
+                System.out.println("Current time is after alarm time");
+                priority = (((Alarm)item.getItem()).getSetTimeMins() + 1440) - model.currentTimeMins();
+            } else {
+
+                priority = ((Alarm)item.getItem()).getSetTimeMins() - model.currentTimeMins();
+            }
+
+            item.setPriority(priority);
+            System.out.println("New Priority: " + item.getPriority());
+            System.out.println(model.getAlarmQueueModel().head());
+        }
+
     }
 
 

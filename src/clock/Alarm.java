@@ -29,8 +29,23 @@ public class Alarm {
     public String getSetTime() {
         return setTime;
     }
+
     public String getFormattedSetTime() {
         return setTime.substring(0, 2) + " : " + setTime.substring(2, 4) + getAM_PM();
+    }
+
+    public int getSetTimeMins() {
+        int mins = 0;
+        Integer hours = Integer.parseInt(setTime.substring(0,2));
+        Integer minutes = Integer.parseInt(setTime.substring(2,4));
+
+        if (getAM_PM() == "AM") {
+            hours += 12;
+        }
+
+        mins = (60 * hours) + minutes;
+
+        return mins;
     }
 
     public void setSetTime(String setTime) {

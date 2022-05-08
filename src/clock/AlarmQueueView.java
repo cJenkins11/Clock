@@ -29,7 +29,59 @@ public class AlarmQueueView extends JPanel {
 
         alarms = new JPanel[model.getSize()];
 
-        for (Node node = model.headNode(); node != null; node = node.getNext()) {
+        if (model.isEmpty()) {
+            JLabel message = new JLabel("No alarms set");
+            add(message);
+        } else {
+
+
+            for (Node node = model.headNode(); node != null; node = node.getNext()) {
+
+                PriorityItem item = (PriorityItem) node.getItem();
+
+                JPanel alarmBox = new JPanel();
+                Label alarmName = new Label(((Alarm)item.getItem()).getAlarmName());
+                Label alarmTime = new Label(((Alarm) item.getItem()).getFormattedSetTime());
+
+                JButton edit = new JButton("Edit");
+
+                JComboBox alarmOn = new JComboBox();
+                alarmOn.addItem("On");
+                alarmOn.addItem("Off");
+
+
+                JButton delete = new JButton("X");
+
+
+                if (((Alarm) item.getItem()).isSet()) {
+                    alarmOn.setSelectedItem("On");
+                } else {
+                    alarmOn.setSelectedItem("Off");
+                }
+
+                alarmBox.add(alarmName);
+                alarmBox.add(alarmTime);
+                alarmBox.add(edit);
+                alarmBox.add(alarmOn);
+
+                alarmBox.add(delete);
+
+                add(alarmBox);
+
+                //alarmBox.validate();
+                //repaint();
+                alarmBox.setVisible(true);
+
+                alarms[index] = alarmBox;
+
+                index += 1;
+                System.out.println("Index: " + index);
+                //System.out.println((Alarm) item.getItem());
+            }
+
+        }
+
+        /*for (Node node = model.headNode(); node != null; node = node.getNext()) {
 
             PriorityItem item = (PriorityItem) node.getItem();
 
@@ -44,6 +96,9 @@ public class AlarmQueueView extends JPanel {
             alarmOn.addItem("Off");
 
 
+            JButton delete = new JButton("X");
+
+
             if (((Alarm) item.getItem()).isSet()) {
                 alarmOn.setSelectedItem("On");
             } else {
@@ -54,6 +109,8 @@ public class AlarmQueueView extends JPanel {
             alarmBox.add(alarmTime);
             alarmBox.add(edit);
             alarmBox.add(alarmOn);
+
+            alarmBox.add(delete);
 
             add(alarmBox);
 
@@ -66,7 +123,7 @@ public class AlarmQueueView extends JPanel {
             index += 1;
             System.out.println("Index: " + index);
             //System.out.println((Alarm) item.getItem());
-        }
+        }*/
 
         validate();
 

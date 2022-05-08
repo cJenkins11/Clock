@@ -51,14 +51,14 @@ public class Model extends Observable {
     }
 
     public Object checkSetAlarms() throws QueueUnderflowException {
-        System.out.println("check set alarms test");
+        //System.out.println("check set alarms test");
         Calendar date = Calendar.getInstance();
         if (!alarmQueueModel.isEmpty()) {
             for (Node node = alarmQueueModel.headNode(); node != null; node = node.getNext()) {
 
 
-                System.out.println(node);
-                System.out.println(node.getNext());
+                //System.out.println(node);
+                //System.out.println(node.getNext());
                 PriorityItem item = (PriorityItem) node.getItem();
 
                 //CHECK ALARM IS SET
@@ -68,11 +68,13 @@ public class Model extends Observable {
                     }*/
 
                     //If set alarm hour is equal to the current alarm continue checking
+/*
                     System.out.println(date.get(Calendar.HOUR));
                     System.out.println(((Alarm) item.getItem()).getSetTime().substring(0, 2));
 
                     System.out.println(date.get(Calendar.MINUTE));
                     System.out.println(((Alarm) item.getItem()).getSetTime().substring(2, 4));
+*/
 
                     String hourString = Integer.toString(hour);
                     if (hour < 10) {
@@ -91,18 +93,18 @@ public class Model extends Observable {
                     //if (((Alarm) item.getItem()).getSetTime().substring(0, 2).equals(Integer.toString(date.get(hour))))  {
                     if (((Alarm) item.getItem()).getSetTime().substring(0, 2).equals(hourString))  {
 
-                        System.out.println("Alarm is set for this hour");
+                        //System.out.println("Alarm is set for this hour");
 
                         //if (((Alarm) item.getItem()).getSetTime().substring(2, 4).equals(Integer.toString(date.get(Calendar.MINUTE)))) {
                         if (((Alarm) item.getItem()).getSetTime().substring(2, 4).equals(minuteString)) {
 
-                            System.out.println("Alarm is set for this minute");
+                            //System.out.println("Alarm is set for this minute");
                             //notifyObservers(item.getItem());
                             return item.getItem();
                         }
                     }
 
-                    System.out.println("Ayo there's a set alarm in here");
+                    //System.out.println("Ayo there's a set alarm in here");
 
                 } else {
                     System.out.println("No alarms set");
@@ -110,13 +112,13 @@ public class Model extends Observable {
 
 
 
-                System.out.println("TIME TEST");
-                System.out.println((((Alarm) item.getItem()).getSetTime()));
+                //System.out.println("TIME TEST");
+                //System.out.println((((Alarm) item.getItem()).getSetTime()));
 
                 //System.out.println((Alarm) item.getItem());
             }
         } else {
-            System.out.println("The queue is empty");
+            //System.out.println("The queue is empty");
         }
         return null;
     }
@@ -183,5 +185,18 @@ public class Model extends Observable {
 
     public void setAlarmingModel(AlarmingModel alarmingModel) {
         this.alarmingModel = alarmingModel;
+    }
+
+    public int currentTimeMins() {
+        int currentMins = 0;
+
+        //if (Calendar.AM_PM == 0) {
+            currentMins = ((hour * 60) + minute);
+
+        /*} else if (Calendar.AM_PM == 1) {
+            currentMins = (((hour * 60) - 720) + minute);
+        }*/
+        //System.out.println(currentMins);
+        return currentMins;
     }
 }
