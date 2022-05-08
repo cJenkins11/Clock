@@ -7,7 +7,7 @@ import java.util.Observable;
 public class AlarmQueueModel<T> extends Observable implements PriorityQueue<T> {
 
     private Node head;
-            //, tail;
+    //private Node tail;
     private int size;
 
     Dimension PREF_SIZE = new Dimension(300, 400);

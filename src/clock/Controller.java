@@ -185,15 +185,44 @@ public class Controller {
         ActionListener dismissListener = e -> {
             view.getAlarmingView().getClip().stop();
             //revalidate();
+            ImageIcon icon = new ImageIcon("assets/bin.png");
+            Image image = icon.getImage(); // transform it
+            Image newimg = image.getScaledInstance(120, 120,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+            icon = new ImageIcon(newimg);
 
-            try {
-                view.getAlarmQueueView().updateQueue();
-                updateAlarmListeners();
-            } catch (QueueUnderflowException ex) {
-                ex.printStackTrace();
+            JLabel message = new JLabel("Do you  want to delete this alarm?");
+            message.setFont(new Font("Arial", Font.BOLD, 16));
+
+            int input = JOptionPane.showConfirmDialog(null,
+                    message, "Select an Option...",JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
+
+            // 0=yes, 1=no, 2=cancel
+            System.out.println(input);
+
+            if (input == 0) {
+                try {
+                    model.getAlarmQueueModel().remove(model.getAlarmingModel().getAlarmRinging());
+
+                    view.getAlarmQueueView().updateQueue();
+                    updateAlarmListeners();
+                } catch (QueueUnderflowException ex) {
+                    ex.printStackTrace();
+                }
+
+                view.getAlarmingView().dispose();
+            } else if (input == 1) {
+                try {
+                    view.getAlarmQueueView().updateQueue();
+                    updateAlarmListeners();
+                } catch (QueueUnderflowException ex) {
+                    ex.printStackTrace();
+                }
+
+                view.getAlarmingView().dispose();
+            } else if (input == 2) {
+                view.alarmingView.getClip().start();
             }
 
-            view.getAlarmingView().dispose();
         };
         view.getAlarmingView().getDismissButton().addActionListener(dismissListener);
         //view.getFrame().add(view.getFunctionMenuView(), BorderLayout.LINE_START);
@@ -251,8 +280,10 @@ public class Controller {
 
 
                     try {
+                        updatePriorities();
                         view.getAlarmQueueView().updateQueue();
                         updateAlarmListeners();
+
                     } catch (QueueUnderflowException ex) {
                         ex.printStackTrace();
                     }
@@ -298,15 +329,31 @@ public class Controller {
                 ActionListener deleteListener = e -> {
 
                     System.out.println("Delete clicked");
-                    try {
+                    ImageIcon icon = new ImageIcon("assets/warning.png");
+                    Image image = icon.getImage(); // transform it
+                    Image newimg = image.getScaledInstance(120, 120,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+                    icon = new ImageIcon(newimg);
 
-                        model.getAlarmQueueModel().remove((Alarm) item.getItem());
-                        view.getAlarmQueueView().updateQueue();
-                        updateAlarmListeners();
+                    JLabel message = new JLabel("Are you sure you  want to delete this alarm?");
+                    message.setFont(new Font("Arial", Font.BOLD, 16));
 
-                    } catch (QueueUnderflowException ex) {
-                        ex.printStackTrace();
+                    int input = JOptionPane.showConfirmDialog(null,
+                            message, "Select an Option...",JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
+
+                    // 0=yes, 1=no, 2=cancel
+                    System.out.println(input);
+                    if (input == 0) {
+                        try {
+
+                            model.getAlarmQueueModel().remove((Alarm) item.getItem());
+                            view.getAlarmQueueView().updateQueue();
+                            updateAlarmListeners();
+
+                        } catch (QueueUnderflowException ex) {
+                            ex.printStackTrace();
+                        }
                     }
+
                 };
 
                 set.addActionListener(setAlarm);
@@ -339,7 +386,12 @@ public class Controller {
             item.setPriority(priority);
             System.out.println("New Priority: " + item.getPriority());
             System.out.println(model.getAlarmQueueModel().head());
+
+
+
         }
+
+
 
     }
 
