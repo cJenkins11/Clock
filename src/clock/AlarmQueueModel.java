@@ -92,9 +92,65 @@ public class AlarmQueueModel<T> extends Observable implements PriorityQueue<T> {
         }
         //Node next = ((Node) alarm).getNext();
 
+        Node temp = head;
         Node previous = null;
 
-        for (Node node = head; node != null; node = node.getNext()) {
+        PriorityItem item = (PriorityItem)temp.getItem();
+
+        //Find alarm position in list
+        int count = 0;
+        while (temp != null && item.getItem() != alarm) {
+            /*System.out.println("in loop");
+            System.out.println("item: " + item.getItem());
+            System.out.println("Target: " + alarm);*/
+
+            /*System.out.println("Previous: " + previous);
+            System.out.println("\nTempItem: " + temp.getItem() + "\n");
+            System.out.println("\nTempItem Priority item: " + item.getItem() + "\n");
+            System.out.println("Temp: " + temp + "\n");*/
+
+            /*if (item.getItem() == alarm) {
+                System.out.println("Found it");
+            }*/
+
+            previous = temp;
+            temp = temp.getNext();
+            item = (PriorityItem) temp.getItem();
+            count++;
+        }
+
+        if (item.getItem() == alarm) {
+            System.out.println("Found it");
+        }
+        System.out.println(count);
+
+        System.out.println("Previous: " + previous);
+        System.out.println("Temp: " + temp);
+
+        //Item not found
+        if (temp == null) {
+
+            System.out.println("alarm not found");
+
+        } else {
+
+            //If searched item is first in the list
+            if (previous == null) {
+
+                System.out.println("Alarm was first in the queue");
+                head = temp.getNext();
+
+            } else {
+
+                System.out.println("Alarm was in the queue");
+                previous.setNext(temp.getNext());
+
+            }
+
+
+        }
+
+        /*for (Node node = head; node != null; node = node.getNext()) {
 
             if (node == alarm) {
 
@@ -106,17 +162,17 @@ public class AlarmQueueModel<T> extends Observable implements PriorityQueue<T> {
             }
 
 
-            /*if (node != head) {
+            *//*if (node != head) {
                 result += ", ";
                 //System.out.println("Node was not the head node");
             }
-            result += node.getItem();*/
+            result += node.getItem();*//*
             //System.out.println("Node item added to result string");
-        }
+        }*/
 
         /*previous.setNext(next);
         next.setPrevious(previous);*/
-        ((Node) alarm).setNext(null);
+        //((Node) alarm).setNext(null);
 
 
     }

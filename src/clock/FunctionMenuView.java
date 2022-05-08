@@ -9,7 +9,10 @@ public class FunctionMenuView extends JPanel implements Observer {
 
     FunctionMenuModel model;
     JButton newAlarm;
-    JButton checkAlarm;
+
+    //Test buttons
+    //JButton checkAlarm;
+    //JButton checkRemove;
 
     public FunctionMenuView(FunctionMenuModel functionMenuModel) {
         model = functionMenuModel;
@@ -19,8 +22,12 @@ public class FunctionMenuView extends JPanel implements Observer {
 
         newAlarm = new JButton("New Alarm");
 
-        checkAlarm = new JButton("Check alarm components");
 
+        //Test items
+       // checkAlarm = new JButton("Check alarm components");
+
+        //checkRemove = new JButton("Check remove");
+        //
         /*ActionListener createAlarm = e -> {
             AlarmFormView alarmFormView = new AlarmFormView(new AlarmFormModel());
         };
@@ -29,6 +36,8 @@ public class FunctionMenuView extends JPanel implements Observer {
         setLayout(new GridLayout(5, 1));
 
         add(newAlarm);
+
+        //add(checkRemove);
         //add(checkAlarm);
 
         setVisible(true);
