@@ -1,5 +1,7 @@
 package clock;
 
+import net.fortuna.ical4j.data.ParserException;
+
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
@@ -233,6 +235,45 @@ public class Controller {
         model.setFunctionMenuModel(new FunctionMenuModel());
         view.setFunctionMenuView(new FunctionMenuView(model.getFunctionMenuModel()));
         view.getFrame().add(view.getFunctionMenuView(), BorderLayout.LINE_START);
+
+        ActionListener exitListener = e -> {
+            System.exit(0);
+        };
+        view.functionMenuView.getExit().addActionListener(exitListener);
+
+
+        ActionListener helpListener = e -> {
+            initHelp();
+        };
+        view.functionMenuView.getHelp().addActionListener(helpListener);
+
+        ActionListener saveListener = e -> {
+            try {
+                initSave();
+            } catch (QueueUnderflowException ex) {
+                ex.printStackTrace();
+            } catch (ParserException ex) {
+                ex.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        };
+        view.functionMenuView.getSave().addActionListener(saveListener);
+    }
+
+    private void initHelp() {
+        model.setHelpModel(new HelpModel());
+        view.setHelpView(new HelpView(model.getHelpModel()));
+
+    }
+
+    private void initSave() throws QueueUnderflowException, ParserException, IOException {
+        if (model.getAlarmQueueModel().head() != null) {
+
+            model.setSaveModel(new SaveModel(model.getAlarmQueueModel().headNode()));
+            view.setSaveView(new SaveView(model.getSaveModel()));
+            model.getSaveModel().save();
+        }
     }
 
     private void initAlarmQueue() throws QueueUnderflowException {

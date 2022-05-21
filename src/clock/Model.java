@@ -20,6 +20,8 @@ public class Model extends Observable {
     AlarmQueueModel alarmQueueModel;
     EditAlarmModel editAlarmModel;
     AlarmingModel alarmingModel;
+    HelpModel helpModel;
+    SaveModel saveModel;
 
     public Model() throws QueueUnderflowException {
         functionMenuModel = new FunctionMenuModel();
@@ -198,5 +200,21 @@ public class Model extends Observable {
         }*/
         //System.out.println(currentMins);
         return currentMins;
+    }
+
+    public HelpModel getHelpModel() {
+        return helpModel;
+    }
+
+    public void setHelpModel(HelpModel helpModel) {
+        this.helpModel = helpModel;
+    }
+
+    public void setSaveModel(SaveModel saveModel) {
+        this.saveModel = saveModel;
+    }
+
+    public SaveModel getSaveModel() {
+        return saveModel;
     }
 }

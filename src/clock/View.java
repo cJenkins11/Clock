@@ -14,6 +14,8 @@ public class View implements Observer {
     AlarmQueueView alarmQueueView;
     EditAlarmView editAlarmView;
     AlarmingView alarmingView;
+    HelpView helpView;
+    SaveView saveView;
 
     public View(Model model) {
         frame = new JFrame();
@@ -96,5 +98,14 @@ public class View implements Observer {
 
     public void setAlarmingView(AlarmingView alarmingView) {
         this.alarmingView = alarmingView;
+    }
+
+    public void setHelpView(HelpView helpView) {
+        this.helpView = helpView;
+    }
+
+
+    public void setSaveView(SaveView saveView) {
+        this.saveView = saveView;
     }
 }

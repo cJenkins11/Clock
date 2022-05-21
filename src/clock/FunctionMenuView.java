@@ -9,6 +9,10 @@ public class FunctionMenuView extends JPanel implements Observer {
 
     FunctionMenuModel model;
     JButton newAlarm;
+    JButton saveAlarms;
+    JButton loadAlarms;
+    JButton help;
+    JButton exit;
 
     //Test buttons
     //JButton checkAlarm;
@@ -21,6 +25,10 @@ public class FunctionMenuView extends JPanel implements Observer {
         setBackground(model.PREF_BACKGROUND);
 
         newAlarm = new JButton("New Alarm");
+        saveAlarms = new JButton("Save Alarms");
+        loadAlarms = new JButton("Load Alarms");
+        help = new JButton("Help");
+        exit = new JButton("Exit");
 
 
         //Test items
@@ -36,6 +44,10 @@ public class FunctionMenuView extends JPanel implements Observer {
         setLayout(new GridLayout(5, 1));
 
         add(newAlarm);
+        add(saveAlarms);
+        add(loadAlarms);
+        add(help);
+        add(exit);
 
         //add(checkRemove);
         //add(checkAlarm);
@@ -50,6 +62,18 @@ public class FunctionMenuView extends JPanel implements Observer {
     @Override
     public void update(Observable o, Object arg) {
 
+    }
+
+    public JButton getExit() {
+        return exit;
+    }
+
+    public JButton getHelp() {
+        return help;
+    }
+
+    public JButton getSave() {
+        return saveAlarms;
     }
 
     /*public void setNewAlarmListener(ActionListener newAlarm) {
