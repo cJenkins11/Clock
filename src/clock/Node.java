@@ -1,3 +1,10 @@
+/**
+ *Created by: Callum Jenkins
+ Student Number: 15012241
+ Version: 2.2
+ Description: Node class that can be used to create singly and doubly linked lists of type T items
+ */
+
 package clock;
 
 /**

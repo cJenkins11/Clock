@@ -1,44 +1,47 @@
+/**
+ *Created by: Callum Jenkins
+ Student Number: 15012241
+ Version: 1.2
+ Description: Model for the save alarm pop up
+ */
+
 package clock;
 
-import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.CalendarOutputter;
-import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Date;
-import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.parameter.Value;
 import net.fortuna.ical4j.model.property.CalScale;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.UidGenerator;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
 
 public class SaveModel {
 
-
-
-
     public String saveMessage;
-    Node head = null;
+    Node head;
 
-
+    /**
+     * Model responsible for saving the set alarms to mycalendar.ics
+     * @param head - The start of the list of alarms
+     */
     public SaveModel(Object head) {
 
         this.head = (Node) head;
         this.saveMessage = "Alarms Saved";
-
     }
 
-    public void save() throws IOException, ParserException {
+    /**
+     * Builds a Calendar object and for each alarm set, it creates a VEvent to add to the calendar.
+     * @throws IOException
+     */
+    public void save() throws IOException {
 
         String calFile = "mycalendar.ics";
+        UidGenerator uidGenerator;
 
         //Calendar
         Calendar calendar = new Calendar();
@@ -46,25 +49,26 @@ public class SaveModel {
         calendar.getProperties().add(Version.VERSION_2_0);
         calendar.getProperties().add(CalScale.GREGORIAN);
 
-        //Event
-        java.util.Calendar eventCal = java.util.Calendar.getInstance();
-        eventCal.set(java.util.Calendar.MONTH, java.util.Calendar.DECEMBER);
-        eventCal.set(java.util.Calendar.DAY_OF_MONTH, 25);
 
-        VEvent christmas = new VEvent(new Date(eventCal.getTime()), "Christmas Day");
-        // initialise as an all-day event..
+        //For each alarm in the queue, create an event
+        int UIDs = 1;
+        for (Node node = head; node != null; node = node.getNext()) {
 
-        //christmas.getProperties().getProperty(Property.DTSTART).getParameters().add(Value.DATE);
+            java.util.Calendar test = java.util.Calendar.getInstance();
 
-        UidGenerator uidGenerator = new UidGenerator() {
-            @Override
-            public Uid generateUid() {
-                return null;
-            }
-        };
-        christmas.getProperties().add(uidGenerator.generateUid());
+            PriorityItem item = (PriorityItem) node.getItem();
 
-        calendar.getComponents().add(christmas);
+            test.set(test.YEAR, test.MONTH, test.DATE, ((Alarm)item.getItem()).getHour(), ((Alarm)item.getItem()).getMinute());
+
+            VEvent testEvent = new VEvent(new Date(test.getTime()), ((Alarm) item.getItem()).getAlarmName());
+
+            int finalUIDs = UIDs;
+            uidGenerator = () -> new Uid(Integer.toString(finalUIDs));
+            testEvent.getProperties().add(uidGenerator.generateUid());
+
+            calendar.getComponents().add(testEvent);
+            UIDs++;
+        }
 
         //Saving an iCalendar file
         FileOutputStream fout = new FileOutputStream(calFile);
@@ -73,32 +77,5 @@ public class SaveModel {
         outputter.setValidating(false);
         outputter.output(calendar, fout);
 
-        //Now Parsing an iCalendar file
-        FileInputStream fin = new FileInputStream(calFile);
-
-        CalendarBuilder builder = new CalendarBuilder();
-
-        calendar = builder.build(fin);
-
-        //Iterating over a Calendar
-        for (Iterator i = calendar.getComponents().iterator(); i.hasNext();) {
-            Component component = (Component) i.next();
-            System.out.println("Component [" + component.getName() + "]");
-
-            for (Iterator j = component.getProperties().iterator(); j.hasNext();) {
-                Property property = (Property) j.next();
-                System.out.println("Property [" + property.getName() + ", " + property.getValue() + "]");
-            }
-        }//for
     }
-
-
-        /*for (Node node = head; node != null; node = node.getNext()) {
-
-            //PriorityItem item = (PriorityItem) node.getItem();
-
-
-
-        }*/
-
 }

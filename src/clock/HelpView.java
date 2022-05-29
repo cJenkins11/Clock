@@ -1,3 +1,10 @@
+/**
+ *Created by: Callum Jenkins
+ Student Number: 15012241
+ Version: 1.1
+ Description: View of the help pop up. Displays information about the Alarm Clock program
+ */
+
 package clock;
 
 import javax.swing.*;
@@ -11,7 +18,10 @@ public class HelpView extends JOptionPane {
     JLabel functionInfo;
     JLabel alarmInfo;
 
-
+    /**
+     * Initiates the view components
+     * @param helpModel - Model of the help pop up
+     */
     public HelpView(HelpModel helpModel) {
         this.model = helpModel;
         panel = new JPanel();

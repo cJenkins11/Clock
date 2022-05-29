@@ -1,6 +1,11 @@
-package clock;
+/**
+ *Created by: Callum Jenkins
+ Student Number: 15012241
+ Version: 1.1
+ Description: Model for the help message popup
+ */
 
-import javax.swing.*;
+package clock;
 
 public class HelpModel {
 
@@ -12,6 +17,9 @@ public class HelpModel {
 
     String alarmsMessage;
 
+    /**
+     * Initialises the help messages with a default message in HTML
+     */
     public HelpModel() {
         title = "Help";
 

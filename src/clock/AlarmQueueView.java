@@ -1,3 +1,10 @@
+/**
+ *Created by: Callum Jenkins
+ Student Number: 15012241
+ Version: 1.2
+ Description: View to display the queue of set alarms to the user
+ */
+
 package clock;
 
 import javax.swing.*;
@@ -8,7 +15,11 @@ public class AlarmQueueView extends JPanel {
     AlarmQueueModel model;
     JPanel[] alarms;
 
-    public AlarmQueueView(AlarmQueueModel m) throws QueueUnderflowException {
+    /**
+     * Alarm queue view constructor
+     * @param m - Model for the view
+     */
+    public AlarmQueueView(AlarmQueueModel m) {
         model = m;
 
         setPreferredSize(model.PREF_SIZE);
@@ -18,12 +29,14 @@ public class AlarmQueueView extends JPanel {
             JLabel message = new JLabel("No alarms set");
             add(message);
         }
-
     }
 
+    /**
+     * Updates the queue view for additions, removals, and edits
+     * @throws QueueUnderflowException
+     */
     public void updateQueue() throws QueueUnderflowException {
         removeAll();
-        //repaint();
 
         int index = 0;
 
@@ -35,6 +48,9 @@ public class AlarmQueueView extends JPanel {
         } else {
 
 
+            /*
+                For each node, create a display for the Alarm in the node
+             */
             for (Node node = model.headNode(); node != null; node = node.getNext()) {
 
                 PriorityItem item = (PriorityItem) node.getItem();
@@ -49,9 +65,7 @@ public class AlarmQueueView extends JPanel {
                 alarmOn.addItem("On");
                 alarmOn.addItem("Off");
 
-
                 JButton delete = new JButton("X");
-
 
                 if (((Alarm) item.getItem()).isSet()) {
                     alarmOn.setSelectedItem("On");
@@ -68,67 +82,20 @@ public class AlarmQueueView extends JPanel {
 
                 add(alarmBox);
 
-                //alarmBox.validate();
-                //repaint();
                 alarmBox.setVisible(true);
 
+                //Add alarm display to the array
                 alarms[index] = alarmBox;
 
                 index += 1;
-                System.out.println("Index: " + index);
-                //System.out.println((Alarm) item.getItem());
             }
-
         }
-
-        /*for (Node node = model.headNode(); node != null; node = node.getNext()) {
-
-            PriorityItem item = (PriorityItem) node.getItem();
-
-            JPanel alarmBox = new JPanel();
-            Label alarmName = new Label(((Alarm)item.getItem()).getAlarmName());
-            Label alarmTime = new Label(((Alarm) item.getItem()).getFormattedSetTime());
-
-            JButton edit = new JButton("Edit");
-
-            JComboBox alarmOn = new JComboBox();
-            alarmOn.addItem("On");
-            alarmOn.addItem("Off");
-
-
-            JButton delete = new JButton("X");
-
-
-            if (((Alarm) item.getItem()).isSet()) {
-                alarmOn.setSelectedItem("On");
-            } else {
-                alarmOn.setSelectedItem("Off");
-            }
-
-            alarmBox.add(alarmName);
-            alarmBox.add(alarmTime);
-            alarmBox.add(edit);
-            alarmBox.add(alarmOn);
-
-            alarmBox.add(delete);
-
-            add(alarmBox);
-
-            //alarmBox.validate();
-            //repaint();
-            alarmBox.setVisible(true);
-
-            alarms[index] = alarmBox;
-
-            index += 1;
-            System.out.println("Index: " + index);
-            //System.out.println((Alarm) item.getItem());
-        }*/
-
         validate();
-
     }
 
+    /**
+     * @return - Array of alarm JPanels
+     */
     public JPanel[] getAlarms() {
         return alarms;
     }

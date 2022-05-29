@@ -1,3 +1,10 @@
+/**
+ *Created by: Callum Jenkins
+ Student Number: 15012241
+ Version: 1.3
+ Description: Alarm creation form view
+ */
+
 package clock;
 
 import javax.swing.*;
@@ -12,10 +19,10 @@ public class AlarmFormView extends JFrame implements Observer {
 
     AlarmFormModel model;
 
-
     private JSpinner hourSpinner;
     private JSpinner minuteSpinner;
     private JComboBox am_pm;
+
     private JRadioButton mondayRB;
     private JRadioButton wednesdayRB;
     private JRadioButton thursdayRB;
@@ -23,7 +30,9 @@ public class AlarmFormView extends JFrame implements Observer {
     private JRadioButton sundayRB;
     private JRadioButton tuesdayRB;
     private JRadioButton fridayRB;
+
     private JTextField alarmName;
+
     private JButton cancelButton;
     private JButton saveButton;
 
@@ -32,37 +41,62 @@ public class AlarmFormView extends JFrame implements Observer {
     private JPanel daysPanel;
     private JPanel namePanel;
     private JPanel buttonPanel;
+
     int daysRepeating = 0;
 
+    /**
+     * New view for alarm creation window
+     * @param alarmFormModel - Model of the alarm creation form
+     */
     public AlarmFormView(AlarmFormModel alarmFormModel) {
         model = alarmFormModel;
+        setPreferredSize(new Dimension(model.getPREF_WIDTH(), model.getPREF_HEIGHT()));
+        setBackground(model.getPREF_BACKGROUND());
 
-        setPreferredSize(new Dimension(600, 250));
-
-        setBackground(model.PREF_BACKGROUND);
-
+        //Panel for setting the time.
+        //JSpinners, combo box and labels
         timePanel = new JPanel();
         timePanel.setPreferredSize(new Dimension(400, 50));
         timePanel.setLayout(new FlowLayout());
 
+
+        //Panel for selecting days to repeat alarm
+        //Grid layout, contains radio buttons
         daysPanel = new JPanel();
         daysPanel.setPreferredSize(new Dimension(550, 50));
         daysPanel.setLayout(new GridLayout(1, 7));
 
+
+        //Panel for naming the alarm
         namePanel = new JPanel();
         namePanel.setPreferredSize(new Dimension(400, 50));
 
+        //Panel for the cancel/save buttons
         buttonPanel = new JPanel();
         buttonPanel.setPreferredSize(new Dimension(400, 50));
 
 
-        hourSpinner = new JSpinner();
-        hourSpinner.setPreferredSize(new Dimension(100, 60));
+        //Componenets being added to the panels
 
+        //Time
+        hourSpinner = new JSpinner();
+        hourSpinner.setPreferredSize(new Dimension(100,30));
+        hourSpinner.setValue(1);
 
         minuteSpinner = new JSpinner();
-        am_pm = new JComboBox();
+        minuteSpinner.setPreferredSize(new Dimension(100,30));
 
+        am_pm = new JComboBox();
+        am_pm.addItem("AM");
+        am_pm.addItem("PM");
+
+        timePanel.setLayout(new FlowLayout());
+        timePanel.add(hourSpinner);
+        timePanel.add(minuteSpinner);
+        timePanel.add(am_pm);
+
+
+        //Days
         mondayRB = new JRadioButton();
         mondayRB.setText("Monday");
 
@@ -84,27 +118,6 @@ public class AlarmFormView extends JFrame implements Observer {
         sundayRB = new JRadioButton();
         sundayRB.setText("Sunday");
 
-        alarmName = new JTextField();
-        JLabel alarmLabel = new JLabel("Alarm name: ");
-        alarmName.setPreferredSize(new Dimension(400, 30));
-
-
-        cancelButton = new JButton("Cancel");
-        saveButton = new JButton("Save");
-
-        hourSpinner.setValue(1);
-        hourSpinner.setPreferredSize(new Dimension(100,30));
-        minuteSpinner.setPreferredSize(new Dimension(100,30));
-        //minuteSpinner.setPreferredSize(model.getSpinnerArrows());
-
-        am_pm.addItem("AM");
-        am_pm.addItem("PM");
-
-        timePanel.setLayout(new FlowLayout());
-        timePanel.add(hourSpinner);
-        timePanel.add(minuteSpinner);
-        timePanel.add(am_pm);
-
         daysPanel.add(mondayRB);
         daysPanel.add(tuesdayRB);
         daysPanel.add(wednesdayRB);
@@ -113,16 +126,27 @@ public class AlarmFormView extends JFrame implements Observer {
         daysPanel.add(saturdayRB);
         daysPanel.add(sundayRB);
 
+
+        //Name
+        alarmName = new JTextField();
+        JLabel alarmLabel = new JLabel("Alarm name: ");
+        alarmName.setPreferredSize(new Dimension(400, 30));
+
         namePanel.setLayout(new FlowLayout());
         namePanel.add(alarmLabel);
         namePanel.add(alarmName);
 
+
+        //Buttons
+        cancelButton = new JButton("Cancel");
+        saveButton = new JButton("Save");
+
         buttonPanel.add(cancelButton);
         buttonPanel.add(saveButton);
 
-        alarmPanel = new JPanel();
-        //alarmPanel.setPreferredSize(new Dimension(500, 230));
 
+        //Main panel
+        alarmPanel = new JPanel();
 
         alarmPanel.add(timePanel, BorderLayout.LINE_START);
         alarmPanel.add(daysPanel);
@@ -131,6 +155,13 @@ public class AlarmFormView extends JFrame implements Observer {
 
         add(alarmPanel);
 
+
+        /*
+            Listens to the hour spinner:
+                Change combobox to AM/PM when looping from 12 -> 1 or 1 -> 12
+                Prevent values of <1 and >12 being entered in the spinners
+
+        */
         ChangeListener hourListener = e -> {
 
             switch (hourSpinner.getValue().toString()) {
@@ -174,6 +205,10 @@ public class AlarmFormView extends JFrame implements Observer {
         hourSpinner.addChangeListener(hourListener);
 
 
+        /*
+            Listens to the minute spinner:
+                Prevent values of <0 and >59 being entered in the spinners
+        */
         ChangeListener minuteListener = e -> {
 
             if (minuteSpinner.getValue().equals(60)) {
@@ -190,6 +225,11 @@ public class AlarmFormView extends JFrame implements Observer {
         minuteSpinner.getModel().addChangeListener(minuteListener);
 
 
+        /*
+            Listens to the radio buttons for mon-sun:
+                If checked, add int value of day to daysRepeating
+                If unchecked, subtract int value of day to daysRepeating
+        */
         ItemListener mondayListener = e -> {
             System.out.println("MONDAY");
             if (mondayRB.isSelected()) {
@@ -276,39 +316,11 @@ public class AlarmFormView extends JFrame implements Observer {
         sundayRB.addItemListener(sundayListener);
 
 
+        //Closes the form frame
         ActionListener cancel = e -> {
             dispose();
         };
         cancelButton.addActionListener(cancel);
-
-        /*ActionListener save = e -> {
-            System.out.println("Test");
-            String timeString = "";
-
-            if (Integer.parseInt(hourSpinner.getValue().toString()) < 10 ) {
-                timeString += "0" + hourSpinner.getValue().toString();
-            } else {
-                timeString += hourSpinner.getValue().toString();
-            }
-
-            if (Integer.parseInt(minuteSpinner.getValue().toString()) < 10 ) {
-                timeString += "0" + minuteSpinner.getValue().toString();
-            } else {
-                timeString += minuteSpinner.getValue().toString();
-            }
-
-            System.out.println(timeString);
-
-            Alarm alarm = new Alarm(timeString, am_pm.getSelectedItem().toString(), alarmName.getText(), daysRepeating);
-            model.setAlarm(alarm);
-
-            System.out.println(alarm);
-            dispose();
-        };
-        saveButton.addActionListener(save);*/
-
-
-
 
         pack();
         setVisible(true);

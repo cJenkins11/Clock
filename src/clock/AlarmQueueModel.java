@@ -1,25 +1,36 @@
+/**
+ *Created by: Callum Jenkins
+ Student Number: 15012241
+ Version: 1.2
+ Description: Model for the alarm queue view. Handles the priority queue of alarms
+ */
+
 package clock;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.Observable;
 
 public class AlarmQueueModel<T> extends Observable implements PriorityQueue<T> {
 
     private Node head;
-    //private Node tail;
     private int size;
 
-    Dimension PREF_SIZE = new Dimension(300, 400);
+    Dimension PREF_SIZE = new Dimension(400, 400);
     Color PREF_COLOUR = Color.CYAN;
 
+    /**
+     * New empty alarm queue
+     */
     public AlarmQueueModel() {
         head = null;
-
-        //Changes
-        //tail = null;
     }
 
+    /**
+     * Add new item with given priority to the queue
+     * @param item - Item to be added
+     * @param priority - int priority of the item
+     * @throws StringIndexOutOfBoundsException
+     */
     @Override
     public void add(Object item, int priority) throws StringIndexOutOfBoundsException {
         PriorityItem newItem = new PriorityItem(item, priority);
@@ -63,6 +74,10 @@ public class AlarmQueueModel<T> extends Observable implements PriorityQueue<T> {
         }
     }
 
+    /**
+     * @return - Node of the highest priority (lowest number)
+     * @throws QueueUnderflowException - If empty, queue has no head
+     */
     public Node headNode() throws  QueueUnderflowException {
         if (isEmpty()) {
             throw new QueueUnderflowException();
@@ -70,6 +85,11 @@ public class AlarmQueueModel<T> extends Observable implements PriorityQueue<T> {
         return head;
     }
 
+    /**
+     *
+     * @return - T of the highest priority
+     * @throws QueueUnderflowException - If empty, queue has no head
+     */
     @Override
     public T head() throws QueueUnderflowException {
         if (isEmpty()) {
@@ -78,6 +98,10 @@ public class AlarmQueueModel<T> extends Observable implements PriorityQueue<T> {
         return (T) head.getItem();
     }
 
+    /**
+     * Removes the highest priority item from the queue
+     * @throws QueueUnderflowException - If empty, nothing to remove
+     */
     @Override
     public void remove() throws QueueUnderflowException {
         if (isEmpty()) {
@@ -86,11 +110,15 @@ public class AlarmQueueModel<T> extends Observable implements PriorityQueue<T> {
         head = head.getNext();
     }
 
+    /**
+     * Removes a specified alarm from the queue
+     * @param alarm - Alarm to be removed
+     * @throws QueueUnderflowException - If empty, nothing to remove
+     */
     public void remove(T alarm) throws QueueUnderflowException {
         if (isEmpty()) {
             throw new QueueUnderflowException();
         }
-        //Node next = ((Node) alarm).getNext();
 
         Node temp = head;
         Node previous = null;
@@ -98,90 +126,39 @@ public class AlarmQueueModel<T> extends Observable implements PriorityQueue<T> {
         PriorityItem item = (PriorityItem)temp.getItem();
 
         //Find alarm position in list
-        int count = 0;
         while (temp != null && item.getItem() != alarm) {
-            /*System.out.println("in loop");
-            System.out.println("item: " + item.getItem());
-            System.out.println("Target: " + alarm);*/
-
-            /*System.out.println("Previous: " + previous);
-            System.out.println("\nTempItem: " + temp.getItem() + "\n");
-            System.out.println("\nTempItem Priority item: " + item.getItem() + "\n");
-            System.out.println("Temp: " + temp + "\n");*/
-
-            /*if (item.getItem() == alarm) {
-                System.out.println("Found it");
-            }*/
-
             previous = temp;
             temp = temp.getNext();
             item = (PriorityItem) temp.getItem();
-            count++;
         }
-
-        if (item.getItem() == alarm) {
-            System.out.println("Found it");
-        }
-        System.out.println(count);
-
-        System.out.println("Previous: " + previous);
-        System.out.println("Temp: " + temp);
 
         //Item not found
         if (temp == null) {
-
-            System.out.println("alarm not found");
 
         } else {
 
             //If searched item is first in the list
             if (previous == null) {
-
-                System.out.println("Alarm was first in the queue");
                 head = temp.getNext();
 
             } else {
 
-                System.out.println("Alarm was in the queue");
                 previous.setNext(temp.getNext());
-
             }
-
-
         }
-
-        /*for (Node node = head; node != null; node = node.getNext()) {
-
-            if (node == alarm) {
-
-                previous.setNext(node.getNext());
-
-
-            } else {
-                previous = node;
-            }
-
-
-            *//*if (node != head) {
-                result += ", ";
-                //System.out.println("Node was not the head node");
-            }
-            result += node.getItem();*//*
-            //System.out.println("Node item added to result string");
-        }*/
-
-        /*previous.setNext(next);
-        next.setPrevious(previous);*/
-        //((Node) alarm).setNext(null);
-
-
     }
 
+    /**
+     * @return - true if head is null
+     */
     @Override
     public boolean isEmpty() {
         return head == null;
     }
 
+    /**
+     * @return String representation of the alarm queue
+     */
     @Override
     public String toString(){
         String result = "[";
@@ -189,23 +166,17 @@ public class AlarmQueueModel<T> extends Observable implements PriorityQueue<T> {
         for (Node node = head; node != null; node = node.getNext()) {
             if (node != head) {
                 result += ", ";
-                //System.out.println("Node was not the head node");
             }
             result += node.getItem();
-            //System.out.println("Node item added to result string");
         }
-
         result = result + "]";
 
         return result;
     }
 
-    public void setAlarm(String setTime, String am_pm, String name, int daysRepeating) {
-    }
-
-    public void editAlarm(Object item) {
-    }
-
+    /**
+     * @return - int of the number of items in the queue
+     */
     public int getSize() {
         size = 0;
         for (Node<T> node = head; node != null; node = node.getNext()) {
@@ -213,5 +184,4 @@ public class AlarmQueueModel<T> extends Observable implements PriorityQueue<T> {
         }
         return size;
     }
-
 }

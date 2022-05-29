@@ -1,3 +1,9 @@
+/**
+ *Created by: Callum Jenkins
+ Student Number: 15012241
+ Version: 1.0
+ Description: Initiates the main model, view, and controller
+ */
 package clock;
 
 public class Clock {

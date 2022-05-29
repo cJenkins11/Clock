@@ -1,3 +1,9 @@
+/**
+ *Created by: Callum Jenkins
+ Student Number: 15012241
+ Version: 2.2
+ Description: Main view of the program, contains a reference to all other views that can be created.
+ */
 package clock;
 
 import javax.swing.*;
@@ -16,26 +22,20 @@ public class View implements Observer {
     AlarmingView alarmingView;
     HelpView helpView;
     SaveView saveView;
+    LoadView loadView;
 
     public View(Model model) {
         frame = new JFrame();
         panel = new ClockPanel(model);
 
-
-        //frame.setContentPane(panel);
         frame.setTitle("Java Clock");
-        frame.setPreferredSize(new Dimension(800, 400));
+        frame.setPreferredSize(new Dimension(1000, 400));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        // Start of border layout code
 
         Container pane = frame.getContentPane();
          
         panel.setPreferredSize(new Dimension(400, 400));
         pane.add(panel, BorderLayout.CENTER);
-
-        // End of borderlayout code
-
 
         frame.pack();
         frame.setVisible(true);
@@ -44,16 +44,6 @@ public class View implements Observer {
     public void update(Observable o, Object arg) {
         frame.pack();
         panel.repaint();
-        if (alarmQueueView.getAlarms() != null) {
-
-            /*try {
-                alarmQueueView.updateQueue();
-            } catch (QueueUnderflowException e) {
-                e.printStackTrace();
-            }*/
-
-        }
-
     }
 
     public JFrame getFrame() {
@@ -104,8 +94,9 @@ public class View implements Observer {
         this.helpView = helpView;
     }
 
-
     public void setSaveView(SaveView saveView) {
         this.saveView = saveView;
     }
+
+    public void setLoadView(LoadView loadView) {this.loadView = loadView;}
 }

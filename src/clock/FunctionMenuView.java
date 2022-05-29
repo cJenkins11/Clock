@@ -1,3 +1,9 @@
+/**
+ *Created by: Callum Jenkins
+ Student Number: 15012241
+ Version: 1.2
+ Description: View of the function buttons on the main panel
+ */
 package clock;
 
 import javax.swing.*;
@@ -14,32 +20,21 @@ public class FunctionMenuView extends JPanel implements Observer {
     JButton help;
     JButton exit;
 
-    //Test buttons
-    //JButton checkAlarm;
-    //JButton checkRemove;
-
+    /**
+     * Main user interface, has buttons for the functions of the alarm clock
+     * @param functionMenuModel
+     */
     public FunctionMenuView(FunctionMenuModel functionMenuModel) {
         model = functionMenuModel;
 
-        setPreferredSize(new Dimension(model.getPREF_WIDTH(), model.PREF_HEIGHT));
-        setBackground(model.PREF_BACKGROUND);
+        setPreferredSize(new Dimension(model.getPREF_WIDTH(), model.getPREF_HEIGHT()));
+        setBackground(model.getPREF_BACKGROUND());
 
         newAlarm = new JButton("New Alarm");
         saveAlarms = new JButton("Save Alarms");
         loadAlarms = new JButton("Load Alarms");
         help = new JButton("Help");
         exit = new JButton("Exit");
-
-
-        //Test items
-       // checkAlarm = new JButton("Check alarm components");
-
-        //checkRemove = new JButton("Check remove");
-        //
-        /*ActionListener createAlarm = e -> {
-            AlarmFormView alarmFormView = new AlarmFormView(new AlarmFormModel());
-        };
-        newAlarm.addActionListener(createAlarm);*/
 
         setLayout(new GridLayout(5, 1));
 
@@ -49,9 +44,6 @@ public class FunctionMenuView extends JPanel implements Observer {
         add(help);
         add(exit);
 
-        //add(checkRemove);
-        //add(checkAlarm);
-
         setVisible(true);
     }
 
@@ -60,9 +52,7 @@ public class FunctionMenuView extends JPanel implements Observer {
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-
-    }
+    public void update(Observable o, Object arg) {}
 
     public JButton getExit() {
         return exit;
@@ -76,7 +66,7 @@ public class FunctionMenuView extends JPanel implements Observer {
         return saveAlarms;
     }
 
-    /*public void setNewAlarmListener(ActionListener newAlarm) {
-        this.newAlarm.addActionListener(newAlarm);
-    }*/
+    public JButton getLoad() {
+        return loadAlarms;
+    }
 }

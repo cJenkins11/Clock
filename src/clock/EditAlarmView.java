@@ -1,3 +1,10 @@
+/**
+ *Created by: Callum Jenkins
+ Student Number: 15012241
+ Version: 1.2
+ Description: View used to edit an alarm
+ */
+
 package clock;
 
 import javax.swing.*;
@@ -5,12 +12,10 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
-import java.util.Observable;
 
 public class EditAlarmView extends JFrame {
 
     EditAlarmModel model;
-
 
     private JSpinner hourSpinner;
     private JSpinner minuteSpinner;
@@ -36,9 +41,9 @@ public class EditAlarmView extends JFrame {
     public EditAlarmView(EditAlarmModel editAlarmModel) {
         model = editAlarmModel;
 
-        setPreferredSize(new Dimension(600, 250));
+        setPreferredSize(new Dimension(model.getPREF_WIDTH(), model.getPREF_HEIGHT()));
 
-        setBackground(model.PREF_BACKGROUND);
+        setBackground(model.getPREF_BACKGROUND());
 
         timePanel = new JPanel();
         timePanel.setPreferredSize(new Dimension(400, 50));
@@ -54,11 +59,7 @@ public class EditAlarmView extends JFrame {
         buttonPanel = new JPanel();
         buttonPanel.setPreferredSize(new Dimension(400, 50));
 
-
         hourSpinner = new JSpinner();
-        hourSpinner.setPreferredSize(new Dimension(100, 60));
-
-
         minuteSpinner = new JSpinner();
         am_pm = new JComboBox();
 
@@ -87,7 +88,6 @@ public class EditAlarmView extends JFrame {
         JLabel alarmLabel = new JLabel("Alarm name: ");
         alarmName.setPreferredSize(new Dimension(400, 30));
 
-
         cancelButton = new JButton("Cancel");
         updateButton = new JButton("Update");
 
@@ -95,16 +95,11 @@ public class EditAlarmView extends JFrame {
         hourSpinner.setPreferredSize(new Dimension(100,30));
         minuteSpinner.setPreferredSize(new Dimension(100,30));
 
-
         am_pm.addItem("AM");
         am_pm.addItem("PM");
 
-
         hourSpinner.setValue(Integer.parseInt(model.getAlarm().setTime.substring(0,2)));
-        System.out.println("Hours: " + Integer.parseInt(model.getAlarm().setTime.substring(0,2)));
-
         minuteSpinner.setValue(Integer.parseInt(model.getAlarm().setTime.substring(2,4)));
-        System.out.println("Mins: " + Integer.parseInt(model.getAlarm().setTime.substring(2,4)));
 
         am_pm.setSelectedItem(model.getAlarm().getAM_PM());
         alarmName.setText(model.getAlarm().getAlarmName());
@@ -131,19 +126,19 @@ public class EditAlarmView extends JFrame {
         buttonPanel.add(updateButton);
 
         alarmPanel = new JPanel();
-        //alarmPanel.setPreferredSize(new Dimension(500, 230));
-
-
         alarmPanel.add(timePanel, BorderLayout.LINE_START);
         alarmPanel.add(daysPanel);
         alarmPanel.add(namePanel);
         alarmPanel.add(buttonPanel);
 
         add(alarmPanel);
-        //this.setLayout(new GridLayout(4, 1));
 
+        /*
+            Listens to the hour spinner:
+                Change combobox to AM/PM when looping from 12 -> 1 or 1 -> 12
+                Prevent values of <1 and >12 being entered in the spinners
 
-
+        */
         ChangeListener hourListener = e -> {
 
             switch (hourSpinner.getValue().toString()) {
@@ -187,6 +182,10 @@ public class EditAlarmView extends JFrame {
         hourSpinner.addChangeListener(hourListener);
 
 
+        /*
+            Listens to the minute spinner:
+                Prevent values of <0 and >59 being entered in the spinners
+        */
         ChangeListener minuteListener = e -> {
 
             if (minuteSpinner.getValue().equals(60)) {
@@ -202,7 +201,11 @@ public class EditAlarmView extends JFrame {
         };
         minuteSpinner.getModel().addChangeListener(minuteListener);
 
-
+        /*
+            Listens to the radio buttons for mon-sun:
+                If checked, add int value of day to daysRepeating
+                If unchecked, subtract int value of day to daysRepeating
+        */
         ItemListener mondayListener = e -> {
             System.out.println("MONDAY");
             if (mondayRB.isSelected()) {
