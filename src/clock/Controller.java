@@ -98,16 +98,15 @@ public class Controller {
                     view.getAlarmQueueView().updateQueue();
                     updateAlarmListeners();
                 }
+
                 if (model.checkSetAlarms() != null) {
 
-                    if ((int) model.checkSetAlarms() == 1 || (int) model.checkSetAlarms() == 0) {
-
-                    } else {
+                    if (model.checkSetAlarms().getClass().getSimpleName().equals("Alarm")){
+                        System.out.println("alarm");
                         initAlarmAlert(model.checkSetAlarms());
                         view.getAlarmingView().addWindowListener(windowListener);
                         view.getAlarmQueueView().validate();
                     }
-
                 }
 
             } catch (QueueUnderflowException | UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
@@ -426,7 +425,8 @@ public class Controller {
                     message.setFont(new Font("Arial", Font.BOLD, 16));
 
                     int input = JOptionPane.showConfirmDialog(null,
-                            message, "Select an Option...",JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
+                            message, "Select an Option...",JOptionPane.YES_NO_CANCEL_OPTION,
+                            JOptionPane.QUESTION_MESSAGE, icon);
 
                     // 0=yes, 1=no, 2=cancel
                     if (input == 0) {
